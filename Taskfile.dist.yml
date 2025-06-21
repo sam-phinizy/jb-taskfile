@@ -17,3 +17,41 @@ tasks:
     desc: Format code
     cmds:
       - ./gradlew ktlintFormat
+
+  test:
+    desc: Run all tests
+    cmds:
+      - ./gradlew test
+
+  version:patch:
+    desc: Bump patch version and create release
+    cmds:
+      - |
+        CURRENT=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+        NEW=$(echo $CURRENT | sed 's/v//' | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+        echo "Bumping from $CURRENT to v$NEW"
+        git tag v$NEW
+        git push origin v$NEW
+    deps: [build]
+
+  version:minor:
+    desc: Bump minor version and create release
+    cmds:
+      - |
+        CURRENT=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+        NEW=$(echo $CURRENT | sed 's/v//' | awk -F. '{$(NF-1) = $(NF-1) + 1; $NF = 0;} 1' | sed 's/ /./g')
+        echo "Bumping from $CURRENT to v$NEW"
+        git tag v$NEW
+        git push origin v$NEW
+    deps: [build]
+
+  version:major:
+    desc: Bump major version and create release
+    cmds:
+      - |
+        CURRENT=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+        NEW=$(echo $CURRENT | sed 's/v//' | awk -F. '{$(NF-2) = $(NF-2) + 1; $(NF-1) = 0; $NF = 0;} 1' | sed 's/ /./g')
+        echo "Bumping from $CURRENT to v$NEW"
+        git tag v$NEW
+        git push origin v$NEW
+    deps: [build]
