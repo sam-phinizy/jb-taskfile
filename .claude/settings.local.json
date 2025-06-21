@@ -10,7 +10,8 @@
       "WebFetch(domain:plugins.jetbrains.com)",
       "WebFetch(domain:taskfile.dev)",
       "Bash(cp:*)",
-      "Bash(gradle:*)"
+      "Bash(gradle:*)",
+      "Bash(task version:patch)"
     ],
     "deny": []
   }

@@ -4,24 +4,23 @@ tasks:
   build:
     desc: Build the plugin
     cmds:
-      - ./gradlew buildPlugin
-    deps: [lint]
-
-  lint:
-    desc: Run linting and static analysis
-    cmds:
-      - ./gradlew check
-    deps: [fmt]
-
-  fmt:
-    desc: Format code
-    cmds:
-      - ./gradlew ktlintFormat
+      - gradle buildPlugin
 
   test:
     desc: Run all tests
     cmds:
-      - ./gradlew test
+      - gradle test
+
+  verify:
+    desc: Verify plugin configuration and structure
+    cmds:
+      - gradle verifyPlugin
+
+  check:
+    desc: Run all checks (test + verify)
+    cmds:
+      - gradle check
+    deps: [test, verify]
 
   version:patch:
     desc: Bump patch version and create release
@@ -32,7 +31,6 @@ tasks:
         echo "Bumping from $CURRENT to v$NEW"
         git tag v$NEW
         git push origin v$NEW
-    deps: [build]
 
   version:minor:
     desc: Bump minor version and create release
@@ -43,7 +41,6 @@ tasks:
         echo "Bumping from $CURRENT to v$NEW"
         git tag v$NEW
         git push origin v$NEW
-    deps: [build]
 
   version:major:
     desc: Bump major version and create release
@@ -54,4 +51,3 @@ tasks:
         echo "Bumping from $CURRENT to v$NEW"
         git tag v$NEW
         git push origin v$NEW
-    deps: [build]
