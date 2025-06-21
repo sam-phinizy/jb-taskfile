@@ -1,0 +1,19 @@
+version: 3
+
+tasks:
+  build:
+    desc: Build the plugin
+    cmds:
+      - ./gradlew buildPlugin
+    deps: [lint]
+
+  lint:
+    desc: Run linting and static analysis
+    cmds:
+      - ./gradlew check
+    deps: [fmt]
+
+  fmt:
+    desc: Format code
+    cmds:
+      - ./gradlew ktlintFormat

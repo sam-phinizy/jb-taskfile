@@ -21,12 +21,16 @@
         <toolWindow id="Taskfile" 
                     secondary="true" 
                     anchor="right" 
+                    canCloseContents="false"
                     factoryClass="com.github.samphinizy.taskfile.toolWindow.TaskfileToolWindowFactory"/>
         
         <applicationConfigurable parentId="tools" 
                                 instance="com.github.samphinizy.taskfile.settings.TaskfileSettingsConfigurable"
                                 id="com.github.samphinizy.taskfile.settings.TaskfileSettingsConfigurable"
                                 displayName="Taskfile"/>
+                                
+        <notificationGroup id="Taskfile Plugin" 
+                          displayType="BALLOON"/>
     </extensions>
 
     <actions>
@@ -36,5 +40,14 @@
                     text="Refresh Taskfiles" 
                     description="Refresh taskfile list"/>
         </group>
+        
+        <!-- Main menu action -->
+        <action id="RunTaskAction" 
+                class="com.github.samphinizy.taskfile.actions.RunTaskAction" 
+                text="Run Task..." 
+                description="Run a Taskfile task">
+            <add-to-group group-id="RunMenu" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift T"/>
+        </action>
     </actions>
 </idea-plugin>
