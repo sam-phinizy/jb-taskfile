@@ -56,6 +56,28 @@ tasks {
     patchPluginXml {
         sinceBuild.set("233")
         untilBuild.set("251.*")
+        
+        // Marketplace metadata
+        pluginDescription.set(
+            """
+            Native Taskfile.dev integration for JetBrains IDEs with automatic discovery, task execution, and comprehensive project management capabilities.
+            
+            Key Features:
+            • Automatic Discovery: Finds all Taskfile.yml files in your project
+            • Tool Window: Dedicated panel with tree view of all tasks  
+            • One-Click Execution: Run tasks directly from IDE with console output
+            • Global Action: Quick task runner via Ctrl+Shift+T
+            • Multi-Taskfile Support: Handles projects with multiple taskfiles
+            • Rich UI: Tasks with descriptions, run buttons, and directory context
+            
+            Getting Started:
+            1. Open any project with Taskfile.yml files
+            2. The Taskfile tool window appears on the right side
+            3. Double-click tasks to run them or use Ctrl+Shift+T
+            
+            Supports all Taskfile.dev v3 features including task dependencies, descriptions, and various command formats.
+            """.trimIndent()
+        )
     }
 
     signPlugin {

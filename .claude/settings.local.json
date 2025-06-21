@@ -6,7 +6,8 @@
       "Bash(gradle build)",
       "Bash(gradle test)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "WebFetch(domain:plugins.jetbrains.com)"
     ],
     "deny": []
   }

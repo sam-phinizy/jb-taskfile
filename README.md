@@ -89,13 +89,23 @@ To create a new release:
 2. The GitHub Action will automatically:
    - Build and test the plugin
    - Create a GitHub release with the plugin ZIP
-   - Publish to JetBrains Marketplace (if `JETBRAINS_PUBLISH_TOKEN` is configured)
+   - Publish to JetBrains Marketplace (if secrets are configured)
 
-### Required Secrets
+### Required Secrets for Marketplace Publishing
 
-For automatic marketplace publishing, add this repository secret:
+Add these repository secrets for automatic marketplace publishing:
 
 - `JETBRAINS_PUBLISH_TOKEN`: Token from [JetBrains Hub](https://plugins.jetbrains.com/author/me/tokens)
+
+### Optional Secrets for Plugin Signing
+
+For enhanced security (recommended for marketplace):
+
+- `CERTIFICATE_CHAIN`: Plugin signing certificate chain
+- `PRIVATE_KEY`: Plugin signing private key  
+- `PRIVATE_KEY_PASSWORD`: Private key password
+
+See [JetBrains Plugin Signing](https://plugins.jetbrains.com/docs/intellij/plugin-signing.html) for details.
 
 ## Architecture
 
