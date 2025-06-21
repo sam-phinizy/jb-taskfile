@@ -1,6 +1,12 @@
 # Taskfile IntelliJ Plugin
 
-A comprehensive JetBrains IDE plugin that provides native integration with [Task](https://taskfile.dev), bringing taskfile discovery, parsing, and execution directly into your development environment.
+<p align="center">
+  <img src="logo.png" alt="Taskfile Plugin Logo" width="200">
+  <br>
+  <em>A comprehensive JetBrains IDE plugin that provides native integration with <a href="https://taskfile.dev">Task</a></em>
+</p>
+
+Bringing taskfile discovery, parsing, and execution directly into your development environment.
 
 ## Features
 

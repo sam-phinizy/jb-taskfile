@@ -8,7 +8,9 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "WebFetch(domain:plugins.jetbrains.com)",
-      "WebFetch(domain:taskfile.dev)"
+      "WebFetch(domain:taskfile.dev)",
+      "Bash(cp:*)",
+      "Bash(gradle:*)"
     ],
     "deny": []
   }
