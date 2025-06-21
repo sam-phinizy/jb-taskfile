@@ -220,26 +220,6 @@ data class TaskfileNodeData(val taskfile: TaskfileModel, val allTaskfiles: List<
             "$relativePath/$taskfileName"  // Show the relative path
         }
     }
-    
-    private fun findCommonBasePath(paths: List<String>): String {
-        if (paths.isEmpty()) return ""
-        if (paths.size == 1) return paths.first().substringBeforeLast("/")
-        
-        val splitPaths = paths.map { it.split("/") }
-        val minLength = splitPaths.minOfOrNull { it.size } ?: 0
-        
-        val commonParts = mutableListOf<String>()
-        for (i in 0 until minLength) {
-            val part = splitPaths.first()[i]
-            if (splitPaths.all { it[i] == part }) {
-                commonParts.add(part)
-            } else {
-                break
-            }
-        }
-        
-        return commonParts.joinToString("/")
-    }
 }
 
 data class TaskNodeData(val task: TaskModel) {

@@ -1,0 +1,103 @@
+name: Build and Release Plugin
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: Cache Gradle packages
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+          
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Run tests
+      run: ./gradlew test
+      
+    - name: Build plugin
+      run: ./gradlew buildPlugin
+      
+    - name: Verify plugin
+      run: ./gradlew verifyPlugin
+      
+    - name: Get version from tag
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      
+    - name: Update plugin version
+      run: |
+        sed -i "s/version = '1.0.0'/version = '${{ steps.get_version.outputs.VERSION }}'/" build.gradle.kts
+        ./gradlew buildPlugin
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ steps.get_version.outputs.VERSION }}
+        body: |
+          ## Taskfile IntelliJ Plugin v${{ steps.get_version.outputs.VERSION }}
+          
+          ### Features
+          - Automatic Taskfile discovery and parsing
+          - Tool window with tree view of tasks
+          - Task execution with integrated console output
+          - Global "Run Task" action (Ctrl+Shift+T)
+          - Directory context display for multiple taskfiles
+          - Comprehensive error handling
+          
+          ### Installation
+          1. Download the plugin JAR file below
+          2. In your JetBrains IDE, go to File → Settings → Plugins
+          3. Click the gear icon → Install Plugin from Disk
+          4. Select the downloaded JAR file
+          5. Restart your IDE
+          
+          The Taskfile tool window will appear on the right side of your IDE.
+        draft: false
+        prerelease: false
+        
+    - name: Upload Plugin JAR
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./build/distributions/Taskfile-${{ steps.get_version.outputs.VERSION }}.zip
+        asset_name: taskfile-intellij-plugin-${{ steps.get_version.outputs.VERSION }}.zip
+        asset_content_type: application/zip
+        
+    - name: Publish to JetBrains Marketplace
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+      env:
+        PUBLISH_TOKEN: ${{ secrets.JETBRAINS_PUBLISH_TOKEN }}
+      run: |
+        if [ -n "$PUBLISH_TOKEN" ]; then
+          ./gradlew publishPlugin
+        else
+          echo "JETBRAINS_PUBLISH_TOKEN not set, skipping marketplace publication"
+        fi
