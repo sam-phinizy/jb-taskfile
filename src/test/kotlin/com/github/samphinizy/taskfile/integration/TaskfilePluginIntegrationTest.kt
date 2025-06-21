@@ -273,6 +273,70 @@ class TaskfilePluginIntegrationTest : BasePlatformTestCase() {
         assertNotNull("Panel should be created", jPanel)
         assertTrue("Panel should have components", jPanel.componentCount > 0)
     }
+    
+    fun testAllSupportedTaskfileNames() {
+        // Test parsing with all officially supported taskfile names
+        val taskfileContent = """
+            version: '3'
+            tasks:
+              test:
+                desc: Test task
+                cmds:
+                  - echo "Testing"
+        """.trimIndent()
+        
+        val supportedNames = listOf(
+            "Taskfile.yml",
+            "taskfile.yml", 
+            "Taskfile.yaml",
+            "taskfile.yaml",
+            "Taskfile.dist.yml",
+            "taskfile.dist.yml",
+            "Taskfile.dist.yaml",
+            "taskfile.dist.yaml"
+        )
+        
+        val parserService = TaskfileParserService()
+        
+        supportedNames.forEach { filename ->
+            val mockFile = createMockVirtualFile(filename, "/project/$filename", taskfileContent)
+            val result = parserService.parseTaskfile(mockFile)
+            
+            assertNotNull("Should parse $filename successfully", result)
+            assertEquals("Should have correct tasks for $filename", 1, result!!.tasks.size)
+            assertEquals("Should parse task name correctly for $filename", "test", result.tasks[0].name)
+        }
+    }
+    
+    fun testDistTaskfileVariants() {
+        // Test that .dist variants are properly supported
+        val taskfileContent = """
+            version: '3'
+            tasks:
+              dist-task:
+                desc: Distribution task
+                cmds:
+                  - echo "From dist file"
+        """.trimIndent()
+        
+        val distNames = listOf(
+            "Taskfile.dist.yml",
+            "taskfile.dist.yml",
+            "Taskfile.dist.yaml", 
+            "taskfile.dist.yaml"
+        )
+        
+        val parserService = TaskfileParserService()
+        
+        distNames.forEach { filename ->
+            val mockFile = createMockVirtualFile(filename, "/project/$filename", taskfileContent)
+            val result = parserService.parseTaskfile(mockFile)
+            
+            assertNotNull("Should parse $filename successfully", result)
+            assertEquals("Should parse dist task", "dist-task", result!!.tasks[0].name)
+            assertEquals("Should parse dist description", "Distribution task", result.tasks[0].description)
+        }
+    }
         
     private fun createMockVirtualFile(name: String, path: String, content: String): VirtualFile {
         val virtualFile = org.mockito.Mockito.mock(VirtualFile::class.java)

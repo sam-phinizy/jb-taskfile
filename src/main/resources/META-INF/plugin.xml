@@ -8,7 +8,7 @@
     
     <h3>Key Features</h3>
     <ul>
-      <li><strong>Automatic Discovery:</strong> Finds all Taskfile.yml files in your project</li>
+      <li><strong>Automatic Discovery:</strong> Finds all taskfiles using official naming conventions (Taskfile.yml, taskfile.yml, *.yaml, *.dist.* variants)</li>
       <li><strong>Tool Window:</strong> Dedicated panel with tree view of all tasks</li>
       <li><strong>One-Click Execution:</strong> Run tasks directly from IDE with console output</li>
       <li><strong>Global Action:</strong> Quick task runner via Ctrl+Shift+T</li>
@@ -31,13 +31,14 @@
     <change-notes><![CDATA[
     <h3>1.0.0 - Initial Release</h3>
     <ul>
-      <li>Automatic Taskfile discovery and YAML parsing</li>
-      <li>Tool window with tree view showing tasks and descriptions</li>
-      <li>Task execution with integrated console output</li>
-      <li>Global "Run Task" action with keyboard shortcut (Ctrl+Shift+T)</li>
-      <li>Directory context display for multiple taskfiles</li>
-      <li>Comprehensive error handling and notifications</li>
-      <li>Support for all Taskfile v3 formats</li>
+      <li><strong>Complete Taskfile Discovery:</strong> Supports all official naming conventions (Taskfile.yml, taskfile.yml, *.yaml, *.dist.* variants) with priority-based selection</li>
+      <li><strong>Tool Window Integration:</strong> Dedicated panel with tree view showing tasks and descriptions</li>
+      <li><strong>One-Click Task Execution:</strong> Run tasks directly from IDE with integrated console output</li>
+      <li><strong>Global Run Action:</strong> Quick task runner with keyboard shortcut (Ctrl+Shift+T)</li>
+      <li><strong>Multi-Taskfile Support:</strong> Directory context display for projects with multiple taskfiles</li>
+      <li><strong>Rich UI:</strong> Green run buttons, task descriptions, and expandable tree structure</li>
+      <li><strong>Comprehensive Error Handling:</strong> User-friendly notifications for parsing and execution errors</li>
+      <li><strong>Full Taskfile v3 Support:</strong> All task formats, dependencies, and command variations</li>
     </ul>
     ]]></change-notes>
 

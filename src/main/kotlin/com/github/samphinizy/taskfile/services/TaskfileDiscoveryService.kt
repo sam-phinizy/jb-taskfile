@@ -12,11 +12,17 @@ import com.intellij.psi.search.GlobalSearchScope
 class TaskfileDiscoveryService(private val project: Project) {
     
     companion object {
-        private val TASKFILE_NAMES = setOf(
+        // All supported taskfile names as per https://taskfile.dev/usage/
+        // Listed in order of priority (Task checks in this order)
+        val TASKFILE_NAMES = listOf(
             "Taskfile.yml",
-            "Taskfile.yaml", 
             "taskfile.yml",
-            "taskfile.yaml"
+            "Taskfile.yaml",
+            "taskfile.yaml",
+            "Taskfile.dist.yml",
+            "taskfile.dist.yml",
+            "Taskfile.dist.yaml",
+            "taskfile.dist.yaml"
         )
         
         fun getInstance(project: Project): TaskfileDiscoveryService {
@@ -26,17 +32,31 @@ class TaskfileDiscoveryService(private val project: Project) {
     
     fun discoverTaskfiles(): List<VirtualFile> {
         return ApplicationManager.getApplication().runReadAction<List<VirtualFile>> {
-            val taskfiles = mutableListOf<VirtualFile>()
+            val allTaskfiles = mutableListOf<VirtualFile>()
             
             TASKFILE_NAMES.forEach { filename ->
                 val files = FilenameIndex.getVirtualFilesByName(
                     filename, 
                     GlobalSearchScope.projectScope(project)
                 )
-                taskfiles.addAll(files)
+                allTaskfiles.addAll(files)
             }
             
-            taskfiles.distinctBy { it.path }
+            // Group by directory and apply priority-based filtering
+            val taskfilesByDirectory = allTaskfiles.groupBy { it.parent?.path ?: "" }
+            
+            taskfilesByDirectory.values.flatMap { filesInDirectory ->
+                // If multiple taskfiles exist in the same directory, pick highest priority one
+                if (filesInDirectory.size <= 1) {
+                    filesInDirectory
+                } else {
+                    // Find the highest priority taskfile in this directory
+                    val priorityFile = TASKFILE_NAMES.firstNotNullOfOrNull { priorityName ->
+                        filesInDirectory.find { it.name == priorityName }
+                    }
+                    listOfNotNull(priorityFile)
+                }
+            }
         }
     }
     

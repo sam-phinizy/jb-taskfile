@@ -50,11 +50,21 @@ After installation, the **Taskfile** tool window appears on the right side of yo
 
 ### Supported Taskfile Features
 
-- All Task v3 YAML formats
-- Task descriptions and commands
-- Task dependencies
-- Multiple taskfiles per project
-- Various command formats (string, array, object)
+- **All Task v3 YAML formats** and task definitions
+- **Complete filename support**: All official taskfile names with priority handling
+  - `Taskfile.yml` (highest priority)
+  - `taskfile.yml` 
+  - `Taskfile.yaml`
+  - `taskfile.yaml`
+  - `Taskfile.dist.yml`
+  - `taskfile.dist.yml`
+  - `Taskfile.dist.yaml`
+  - `taskfile.dist.yaml` (lowest priority)
+- **Task descriptions and commands** in all supported formats
+- **Task dependencies** including complex dependency chains
+- **Multiple taskfiles per project** with directory context display
+- **Priority-based discovery**: When multiple taskfiles exist in the same directory, the highest priority one is used (matching Task's behavior)
+- **Various command formats**: string, array, and object-based task definitions
 
 ## Development
 

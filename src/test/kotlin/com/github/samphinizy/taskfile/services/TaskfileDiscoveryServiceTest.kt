@@ -49,6 +49,43 @@ class TaskfileDiscoveryServiceTest : BasePlatformTestCase() {
         assertNotNull("Should return a list", result)
     }
     
+    fun testSupportedTaskfileNames() {
+        // Test that all official Taskfile names are supported
+        val supportedNames = listOf(
+            "Taskfile.yml",
+            "taskfile.yml", 
+            "Taskfile.yaml",
+            "taskfile.yaml",
+            "Taskfile.dist.yml",
+            "taskfile.dist.yml",
+            "Taskfile.dist.yaml",
+            "taskfile.dist.yaml"
+        )
+        
+        // Verify all names are in our discovery list
+        supportedNames.forEach { name ->
+            // This is a design test - ensure we support all variants
+            assertTrue("Should support $name", TaskfileDiscoveryService.TASKFILE_NAMES.contains(name))
+        }
+    }
+    
+    fun testTaskfilePriorityOrder() {
+        // Test that taskfiles are ordered by priority (as per Task documentation)
+        val expectedOrder = listOf(
+            "Taskfile.yml",      // Highest priority
+            "taskfile.yml",
+            "Taskfile.yaml",
+            "taskfile.yaml",
+            "Taskfile.dist.yml",
+            "taskfile.dist.yml",
+            "Taskfile.dist.yaml",
+            "taskfile.dist.yaml" // Lowest priority
+        )
+        
+        assertEquals("Taskfile names should be in priority order", 
+                    expectedOrder, TaskfileDiscoveryService.TASKFILE_NAMES)
+    }
+    
     private fun createMockVirtualFile(name: String, path: String): VirtualFile {
         val virtualFile = mock(VirtualFile::class.java)
         `when`(virtualFile.name).thenReturn(name)
