@@ -1,0 +1,40 @@
+<idea-plugin>
+    <id>com.github.samphinizy.taskfile</id>
+    <name>Taskfile</name>
+    <vendor email="sam@phinizy.com" url="https://github.com/sam-phinizy">Sam Phinizy</vendor>
+
+    <description><![CDATA[
+    Taskfile integration for JetBrains IDEs. Provides a tool window to discover, manage and execute Taskfile tasks directly from your IDE.
+    
+    Features:
+    - Automatic Taskfile discovery and parsing
+    - Dedicated tool window with tree view of tasks
+    - Task execution with integrated console output
+    - Support for nested taskfiles
+    - Task dependency handling
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.plugins.yaml</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="Taskfile" 
+                    secondary="true" 
+                    anchor="right" 
+                    factoryClass="com.github.samphinizy.taskfile.toolWindow.TaskfileToolWindowFactory"/>
+        
+        <applicationConfigurable parentId="tools" 
+                                instance="com.github.samphinizy.taskfile.settings.TaskfileSettingsConfigurable"
+                                id="com.github.samphinizy.taskfile.settings.TaskfileSettingsConfigurable"
+                                displayName="Taskfile"/>
+    </extensions>
+
+    <actions>
+        <group id="TaskfileActionGroup" text="Taskfile" description="Taskfile actions">
+            <action id="TaskfileRefresh" 
+                    class="com.github.samphinizy.taskfile.actions.RefreshAction" 
+                    text="Refresh Taskfiles" 
+                    description="Refresh taskfile list"/>
+        </group>
+    </actions>
+</idea-plugin>
