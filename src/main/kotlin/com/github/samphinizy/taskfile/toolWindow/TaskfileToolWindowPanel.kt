@@ -17,10 +17,8 @@ import java.awt.Color
 import java.awt.Component
 import java.awt.Cursor
 import java.awt.Font
-import java.awt.FlowLayout
 import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
-import javax.swing.JButton
 import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JScrollPane
@@ -50,7 +48,7 @@ class TaskfileToolWindowPanel(private val project: Project) {
         tree.putClientProperty("JTree.lineStyle", "None")
         
         // Try multiple ways to disable selection background
-        val transparentColor = java.awt.Color(0, 0, 0, 0)
+        val transparentColor = Color(0, 0, 0, 0)
         tree.putClientProperty("Tree.selectionBackground", transparentColor)
         tree.putClientProperty("Tree.selectionBorderColor", transparentColor)
         tree.putClientProperty("Tree.textBackground", transparentColor)
